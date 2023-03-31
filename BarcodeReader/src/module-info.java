@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author Lom
+ *
+ */
+module BarcodeReader {
+}

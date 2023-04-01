@@ -27,16 +27,18 @@ class BarcodeImage implements Cloneable {
 		int i = strData.length - 1;
 		while (i >= 0) {
 			if(strData[i--].charAt(0) == ' ') {
+				System.out.print('*');
 				continue;
 			}
 			else  {
-				this.imageData = barcodeImageHelper(strData, i);
+				System.out.print('*');
+				this.imageData = BarcodeImageHelper(strData, i);
 				break;
 			}
 		}
 	}
 	
-	public boolean[][] barcodeImageHelper(String[] strData, int currIndex) {
+	public boolean[][] BarcodeImageHelper(String[] strData, int currIndex) {
 		boolean[][] newList = new boolean[MAX_HEIGHT][MAX_WIDTH];
 		int  botToTop = MAX_HEIGHT;
 		
@@ -45,9 +47,11 @@ class BarcodeImage implements Cloneable {
 			for(int leftToRight = 0; leftToRight < strTemp.length(); leftToRight++) {
 				if(strTemp.charAt(leftToRight) == '*') {
 					newList[botToTop][leftToRight] = true;
+					System.out.print('*');
 				}
 				else {
 					newList[botToTop][leftToRight] = false;
+					System.out.print(' ');
 				}
 				
 			}
@@ -56,6 +60,18 @@ class BarcodeImage implements Cloneable {
 		}
 		
 		return newList;
+	}
+	
+	public void TestPrint() {
+		for(int i = 0; i < MAX_HEIGHT; i++) {
+			for(int j = 0; i < MAX_WIDTH; j++) {
+				if(this.imageData[i][j] == true)
+					System.out.print('*');
+				else
+					System.out.print(' ');
+			}
+			System.out.println("");
+		}
 	}
 }
 
@@ -83,8 +99,29 @@ class DataMatrix implements BarcodeIO {
 
 public class Main {
 	public static void main(String[] args) {
-		DataMatrix test = new DataMatrix();
-		
-		System.out.println(test.scan(null));
+		 String[] sImageIn =  
+			 {  
+			 "                                               ",  
+			 "                                               ",  
+			 "                                               ",  
+			 "     * * * * * * * * * * * * * * * * * * * * * ",  
+			 "     *                                       * ",  
+			 "     ****** **** ****** ******* ** *** *****   ",  
+			 "     *     *    ****************************** ",  
+			 "     * **    * *        **  *    * * *   *     ",  
+			 "     *   *    *  *****    *   * *   *  **  *** ",  
+			 "     *  **     * *** **   **  *    **  ***  *  ",  
+			 "     ***  * **   **  *   ****    *  *  ** * ** ",  
+			 "     *****  ***  *  * *   ** ** **  *   * *    ",  
+			 "     ***************************************** ",   
+			 "                                               ",  
+			 "                                               ",  
+			 "                                               "  
+			  
+			 };
+		BarcodeImage barcodeImage = new BarcodeImage(sImageIn);
+//		barcodeImage.TestPrint();
+//		DataMatrix test = new DataMatrix();
+//		System.out.println(test.scan(null));
 	}
 }

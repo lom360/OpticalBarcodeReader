@@ -24,18 +24,37 @@ class BarcodeImage implements Cloneable {
 	}
 	
 	public BarcodeImage(String[] strData) {
-		int i = strData.length - 1;
-		while (i >= 0) {
-			if(strData[i--].charAt(0) == ' ') {
-				System.out.print('*');
-				continue;
-			}
-			else  {
-				System.out.print('*');
-				this.imageData = BarcodeImageHelper(strData, i);
-				break;
+		int[] startOfBarcode = FindStartOfBarcode(strData);
+		int[] endOfBarcode = FindEndOfBarcode(strData, startOfBarcode);
+		
+	}
+	
+	
+	public int[] FindStartOfBarcode(String[] strData) {
+		int[] intArray = new int[2];
+		for(int i = 0; i < strData.length - 1; i++) {
+			for(int j = 0; j < strData[i].length(); j++) {
+				if(strData[i].charAt(j) == '*') {
+					intArray[0] = i;
+					intArray[1] = j;
+				}
 			}
 		}
+		return intArray;
+	}
+	
+	public int[] FindEndOfBarcode(String[] strData, int[] indexes) {
+		int[] intArray = new int[2];
+		int i = indexes[0];
+		int j = indexes[1];
+		for(int k = strData[i].length()-1; k > j; k--) {
+			if(strData[i].charAt(k-1) == '*') {
+				intArray[0] = i;
+				intArray[1] = k;
+			}
+		}
+		
+		return intArray;
 	}
 	
 	public boolean[][] BarcodeImageHelper(String[] strData, int currIndex) {

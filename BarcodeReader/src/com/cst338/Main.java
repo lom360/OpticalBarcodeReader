@@ -24,33 +24,57 @@ class BarcodeImage implements Cloneable {
 	}
 	
 	public BarcodeImage(String[] strData) {
-		int[] startOfBarcode = FindStartOfBarcode(strData);
-		int[] endOfBarcode = FindEndOfBarcode(strData, startOfBarcode);
+		int[] topLeft = FindTopLeftBarcode(strData);
+		int[] bottomRight = FindBottomRightBarcode(strData);
 		
+		int height = bottomRight[0] - topLeft[0] + 1;
+		int width = bottomRight[1] - topLeft[1] + 1;
+		
+		
+//		int topLeftCorner = startOfBarcode[0];
+//		int leftEdge = startOfBarcode[1];
+//		int rightEdge = endOfBarcode[1];
+//		for(int i = topLeftCorner + 9; i >= topLeftCorner; i--) {
+//			for(int j = leftEdge; j <= rightEdge; j++) {
+//				if(strData[i].charAt(j) == '*')
+//					
+//			}
+//		}
 	}
 	
 	
-	public int[] FindStartOfBarcode(String[] strData) {
+	public int[] FindTopLeftBarcode(String[] strData) {
 		int[] intArray = new int[2];
 		for(int i = 0; i < strData.length - 1; i++) {
 			for(int j = 0; j < strData[i].length(); j++) {
 				if(strData[i].charAt(j) == '*') {
 					intArray[0] = i;
 					intArray[1] = j;
+					return intArray;
 				}
 			}
 		}
 		return intArray;
 	}
 	
-	public int[] FindEndOfBarcode(String[] strData, int[] indexes) {
+	public int[] FindBottomRightBarcode(String[] strData) {
 		int[] intArray = new int[2];
-		int i = indexes[0];
-		int j = indexes[1];
-		for(int k = strData[i].length()-1; k > j; k--) {
-			if(strData[i].charAt(k-1) == '*') {
-				intArray[0] = i;
-				intArray[1] = k;
+//		int i = indexes[0];
+//		int j = indexes[1];
+//		for(int k = strData[i].length()-1; k > j; k--) {
+//			if(strData[i].charAt(k) == '*') {
+//				intArray[0] = i + 10;
+//				intArray[1] = k;
+//			}
+//		}
+		
+		for(int i = strData.length - 1; i >= 0; i--) {
+			for(int j = strData[i].length() - 1; j >= 0; j--) {
+				if(strData[i].charAt(j) == '*') {
+					intArray[0] = i;
+					intArray[1] = j;
+					return intArray;
+				}
 			}
 		}
 		

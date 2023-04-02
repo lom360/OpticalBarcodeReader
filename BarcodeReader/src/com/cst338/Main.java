@@ -27,21 +27,35 @@ class BarcodeImage implements Cloneable {
 		int[] topLeft = FindTopLeftBarcode(strData);
 		int[] bottomRight = FindBottomRightBarcode(strData);
 		
-		int height = bottomRight[0] - topLeft[0] + 1;
-		int width = bottomRight[1] - topLeft[1] + 1;
+//		int height = bottomRight[0] - topLeft[0] + 1;
+//		int width = bottomRight[1] - topLeft[1] + 1;
+		this.imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
 		
-		
-//		int topLeftCorner = startOfBarcode[0];
-//		int leftEdge = startOfBarcode[1];
-//		int rightEdge = endOfBarcode[1];
-//		for(int i = topLeftCorner + 9; i >= topLeftCorner; i--) {
-//			for(int j = leftEdge; j <= rightEdge; j++) {
-//				if(strData[i].charAt(j) == '*')
-//					
+		int topEdge = topLeft[0];
+		int leftEdge = topLeft[1];
+		int bottomEdge = bottomRight[0];
+		int rightEdge = bottomRight[1];
+		int goUp = MAX_HEIGHT - 1;
+		int goRight = 0;
+		for(int i = bottomEdge; i >= topEdge; i--) {
+			for(int j = leftEdge; j <= rightEdge; j++) {
+//				System.out.println(goRight);
+				if(strData[i].charAt(j) == '*') 
+					imageData[goUp][goRight++] = true;
+				else
+					imageData[goUp][goRight++] = false;
+			}
+			goUp--; // Move up the matrix
+			goRight = 0; // reset to left side of matrix
+		}
+//		int height = MAX_HEIGHT - bottomRight[0] - topLeft[0] + 1;
+//		int width = MAX_WIDTH - bottomRight[1] - topLeft[1] + 1;
+//		for(int i = MAX_HEIGHT - 1; i >= height; i--) {
+//			for(int j = 0; j <= width; j++) {
+//				if()
 //			}
 //		}
 	}
-	
 	
 	public int[] FindTopLeftBarcode(String[] strData) {
 		int[] intArray = new int[2];
@@ -59,15 +73,6 @@ class BarcodeImage implements Cloneable {
 	
 	public int[] FindBottomRightBarcode(String[] strData) {
 		int[] intArray = new int[2];
-//		int i = indexes[0];
-//		int j = indexes[1];
-//		for(int k = strData[i].length()-1; k > j; k--) {
-//			if(strData[i].charAt(k) == '*') {
-//				intArray[0] = i + 10;
-//				intArray[1] = k;
-//			}
-//		}
-		
 		for(int i = strData.length - 1; i >= 0; i--) {
 			for(int j = strData[i].length() - 1; j >= 0; j--) {
 				if(strData[i].charAt(j) == '*') {
@@ -77,37 +82,12 @@ class BarcodeImage implements Cloneable {
 				}
 			}
 		}
-		
 		return intArray;
-	}
-	
-	public boolean[][] BarcodeImageHelper(String[] strData, int currIndex) {
-		boolean[][] newList = new boolean[MAX_HEIGHT][MAX_WIDTH];
-		int  botToTop = MAX_HEIGHT;
-		
-		while(strData[currIndex].charAt(0) != ' ') {
-			String strTemp = strData[currIndex];
-			for(int leftToRight = 0; leftToRight < strTemp.length(); leftToRight++) {
-				if(strTemp.charAt(leftToRight) == '*') {
-					newList[botToTop][leftToRight] = true;
-					System.out.print('*');
-				}
-				else {
-					newList[botToTop][leftToRight] = false;
-					System.out.print(' ');
-				}
-				
-			}
-			botToTop--;
-			currIndex--;
-		}
-		
-		return newList;
 	}
 	
 	public void TestPrint() {
 		for(int i = 0; i < MAX_HEIGHT; i++) {
-			for(int j = 0; i < MAX_WIDTH; j++) {
+			for(int j = 0; j < MAX_WIDTH; j++) {
 				if(this.imageData[i][j] == true)
 					System.out.print('*');
 				else
@@ -163,7 +143,7 @@ public class Main {
 			  
 			 };
 		BarcodeImage barcodeImage = new BarcodeImage(sImageIn);
-//		barcodeImage.TestPrint();
+		barcodeImage.TestPrint();
 //		DataMatrix test = new DataMatrix();
 //		System.out.println(test.scan(null));
 	}

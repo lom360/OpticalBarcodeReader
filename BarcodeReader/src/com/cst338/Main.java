@@ -39,7 +39,6 @@ class BarcodeImage implements Cloneable {
 		int goRight = 0;
 		for(int i = bottomEdge; i >= topEdge; i--) {
 			for(int j = leftEdge; j <= rightEdge; j++) {
-//				System.out.println(goRight);
 				if(strData[i].charAt(j) == '*') 
 					imageData[goUp][goRight++] = true;
 				else
@@ -48,13 +47,6 @@ class BarcodeImage implements Cloneable {
 			goUp--; // Move up the matrix
 			goRight = 0; // reset to left side of matrix
 		}
-//		int height = MAX_HEIGHT - bottomRight[0] - topLeft[0] + 1;
-//		int width = MAX_WIDTH - bottomRight[1] - topLeft[1] + 1;
-//		for(int i = MAX_HEIGHT - 1; i >= height; i--) {
-//			for(int j = 0; j <= width; j++) {
-//				if()
-//			}
-//		}
 	}
 	
 	public int[] FindTopLeftBarcode(String[] strData) {
@@ -99,6 +91,15 @@ class BarcodeImage implements Cloneable {
 }
 
 class DataMatrix implements BarcodeIO {
+	public static final char BLACK_CHAR = '*';
+	public static final char WHITH_CHAR = ' ';
+	private BarcodeImage image;
+	private String text;
+	private int actualWidth, actualHeight;
+	
+	public DataMatrix() {
+		
+	}
 	public boolean scan(BarcodeImage bc) {
 		return true;
 	}

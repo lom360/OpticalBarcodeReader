@@ -77,6 +77,29 @@ class BarcodeImage implements Cloneable {
 		return intArray;
 	}
 	
+	public void testChange() {
+		this.imageData[0][0] = !this.imageData[0][0];
+	}
+	
+	public BarcodeImage clone() {
+		try {
+			// Shallow copy
+			BarcodeImage cloned = (BarcodeImage) super.clone();
+			
+			// Deep copy any mutable fields
+			cloned.imageData = imageData.clone();
+			for (int i = 0; i < imageData.length; i++) {
+				cloned.imageData[i] = imageData[i].clone();
+			}
+			
+			return cloned;
+		}
+		catch (CloneNotSupportedException e) {
+			// Should never happen since BarcodeImage implements Cloneable
+			throw new AssertionError();
+		}
+	}
+	
 	public void TestPrint() {
 		for(int i = 0; i < MAX_HEIGHT; i++) {
 			for(int j = 0; j < MAX_WIDTH; j++) {
@@ -98,7 +121,10 @@ class DataMatrix implements BarcodeIO {
 	private int actualWidth, actualHeight;
 	
 	public DataMatrix() {
-		
+		this.actualHeight = 0;
+		this.actualWidth = 0;
+		this.text = " ";
+		this.image = new BarcodeImage();
 	}
 	public boolean scan(BarcodeImage bc) {
 		return true;
@@ -144,6 +170,9 @@ public class Main {
 			  
 			 };
 		BarcodeImage barcodeImage = new BarcodeImage(sImageIn);
+		BarcodeImage clone = barcodeImage.clone();
+		clone.testChange();
+		clone.TestPrint();
 		barcodeImage.TestPrint();
 //		DataMatrix test = new DataMatrix();
 //		System.out.println(test.scan(null));

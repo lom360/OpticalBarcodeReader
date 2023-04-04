@@ -31,22 +31,31 @@ class BarcodeImage implements Cloneable {
 //		int width = bottomRight[1] - topLeft[1] + 1;
 		this.imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
 		
-		int topEdge = topLeft[0];
-		int leftEdge = topLeft[1];
-		int bottomEdge = bottomRight[0];
-		int rightEdge = bottomRight[1];
-		int goUp = MAX_HEIGHT - 1;
-		int goRight = 0;
-		for(int i = bottomEdge; i >= topEdge; i--) {
-			for(int j = leftEdge; j <= rightEdge; j++) {
-				if(strData[i].charAt(j) == '*') 
-					imageData[goUp][goRight++] = true;
+		for(int i = 0; i < strData.length; i++) {
+			for(int j = 0; j < strData[i].length(); j++) {
+				if(strData[i].charAt(j) == '*')
+					this.imageData[i][j] = true;
 				else
-					imageData[goUp][goRight++] = false;
+					this.imageData[i][j] = false;
 			}
-			goUp--; // Move up the matrix
-			goRight = 0; // reset to left side of matrix
 		}
+		
+//		int topEdge = topLeft[0];
+//		int leftEdge = topLeft[1];
+//		int bottomEdge = bottomRight[0];
+//		int rightEdge = bottomRight[1];
+//		int goUp = MAX_HEIGHT - 1;
+//		int goRight = 0;
+//		for(int i = bottomEdge; i >= topEdge; i--) {
+//			for(int j = leftEdge; j <= rightEdge; j++) {
+//				if(strData[i].charAt(j) == '*') 
+//					imageData[goUp][goRight++] = true;
+//				else
+//					imageData[goUp][goRight++] = false;
+//			}
+//			goUp--; // Move up the matrix
+//			goRight = 0; // reset to left side of matrix
+//		}
 	}
 	
 	public int[] FindTopLeftBarcode(String[] strData) {
@@ -100,7 +109,7 @@ class BarcodeImage implements Cloneable {
 		}
 	}
 	
-	public void TestPrint() {
+	public void DisplayToConsole() {
 		for(int i = 0; i < MAX_HEIGHT; i++) {
 			for(int j = 0; j < MAX_WIDTH; j++) {
 				if(this.imageData[i][j] == true)
@@ -123,10 +132,15 @@ class DataMatrix implements BarcodeIO {
 	public DataMatrix() {
 		this.actualHeight = 0;
 		this.actualWidth = 0;
-		this.text = " ";
+		this.text = "";
 		this.image = new BarcodeImage();
 	}
+	
+	public DataMatrix(BarcodeImage image) {
+		scan(image);
+	}
 	public boolean scan(BarcodeImage bc) {
+		this.image = bc.clone();
 		return true;
 	}
 	public boolean readText(String text) {
@@ -169,11 +183,32 @@ public class Main {
 			 "                                               "  
 			  
 			 };
-		BarcodeImage barcodeImage = new BarcodeImage(sImageIn);
+		 
+		 String[] sImageIn_2 =  
+			 {  
+			 "                                          ",  
+			 "                                          ",  
+			 "* * * * * * * * * * * * * * * * * * *     ",  
+			 "*                                    *    ",  
+			 "**** *** **   ***** ****   *********      ",  
+			 "* ************ ************ **********    ",  
+			 "** *      *    *  * * *         * *       ",  
+			 "***   *  *           * **    *      **    ",  
+			 "* ** * *  *   * * * **  *   ***   ***     ",  
+			 "* *           **    *****  *   **   **    ",  
+			 "****  *  * *  * **  ** *   ** *  * *      ",  
+			 "**************************************    ",  
+			 "                                          ",  
+			 "                                          ",  
+			 "                                          ",  
+			 "                                          "  
+			  
+			 }; 
+		BarcodeImage barcodeImage = new BarcodeImage(sImageIn_2);
 		BarcodeImage clone = barcodeImage.clone();
-		clone.testChange();
-		clone.TestPrint();
-		barcodeImage.TestPrint();
+//		clone.testChange();
+//		clone.DisplayToConsole();
+		barcodeImage.DisplayToConsole();
 //		DataMatrix test = new DataMatrix();
 //		System.out.println(test.scan(null));
 	}
